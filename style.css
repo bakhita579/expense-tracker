@@ -15,11 +15,18 @@ body{
 }
 .container{
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
     background-color: #1e293b;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    margin: auto;
+}
+h1{
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+    color: #38bdf8;
+    text-align: center;
 }
 h2{
     font-size: larger;
@@ -27,6 +34,10 @@ h2{
     color: #38bdf8;
     text-align: center;
 
+}
+form div, section{
+    margin-bottom: 18px;
+    width: 100%;
 }
 section{
     margin-bottom: 20px;
@@ -56,4 +67,49 @@ select{
 input:focus,select:focus{
     outline: none;
     border-color: #38bdf8;
+}
+button[type="submit"]{
+    width: 70%;
+    padding: 10px;
+    background-color: #0284c7;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 15px;
+}
+button[type="submit"]:hover{
+    background-color: #0284c7;
+}
+#runningTotal{
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4ade80;
+}
+#expenseList div > div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1e293b;
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #334155;
+}
+#expenseList button{
+    width: auto;
+    padding: 5px 10px;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #334155;
+    font-size: medium;
+}
+#expenseList button:hover{
+    background-color: #dc26dc;
 }
