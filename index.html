@@ -7,8 +7,24 @@
      <link rel="stylesheet" href="style.css">
 </head>
 <body>
+   <div class="container">
+    <header>
+        <h1>Global Expense Tracker</h1>
+        <label for="HomeCurrency">Home Currency</label>
+        <select id="HomeCurrency">
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <option value="KES">KES</option>
+            </select>
+    </header>
+    <main>
+        <section>
+            <h2>Total Expense</h2>
+            <div id="runningTotal">0.00 KES</div>
+        </section>
     <section>
-    <form id="expenseForm">
+        <form id="expenseForm"></form>
         <h2>Add Expense</h2>
         <div>
             <label for = "Description>"></label>
