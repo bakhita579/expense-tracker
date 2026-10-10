@@ -27,8 +27,33 @@ h2{
     color: #38bdf8;
     text-align: center;
 
-
 }
 section{
-
+    margin-bottom: 20px;
+    background-color: #0f172a;
+    padding: 20px;
+    border-radius: 8px;
+    border-radius: 1px solid #334155;
+    
+}
+label{
+    display: block;
+    font-size: medium;
+    margin-bottom: 6px;
+    color: #94a3b8;
+}
+input [type = "text"], 
+input[type = "number"]
+select{
+    width: 100%;
+    padding: 10px;
+    background-color: #1e293b;
+    border: 1px solid #475569;
+    border-radius: 5px;
+    color: #f8fafc;
+    font-size: medium;
+}
+input:focus,select:focus{
+    outline: none;
+    border-color: #38bdf8;
 }
