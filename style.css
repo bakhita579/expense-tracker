@@ -13,3 +13,22 @@ body{
     min-height: 100vh;
     padding: 20px;
 }
+.container{
+    width: 100%;
+    max-width: 600px;
+    background-color: #1e293b;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+}
+h2{
+    font-size: larger;
+    margin-bottom: 20px;
+    color: #38bdf8;
+    text-align: center;
+
+
+}
+section{
+
+}
