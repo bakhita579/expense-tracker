@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXPENSE TRACKER</title>
+     <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <form id="expenseForm">
+        <h2>Add Expense</h2>
+        <div>
+            <label for = "Description>"></label>
+            <input type="text" id="Description" required placeholder="">
+         </div>
+         <div>
+            <label for = "Amount"></label>
+            <input type="text" id="Amount" step="0.1" required placeholder="" >  
+              </div>
+              <div>
+                <label for ="Currency"></label>
+                    <select  id="Currency">
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="GBP">GBP</option>
+                        <option value="KES">KES</option>
+
+                    </select>
+                
+              </div>
+              <div>
+                <label for = "Category"></label>
+                <select id="Catergory">
+                <option value="Food">Food</option>
+                 <option value="Transport">Transport</option>
+                  <option value="Shopping">Shopping</option>
+                   <option value="Accomodation">Accomodation</option>
+                    <option value="Other">Other</option>
+                </select>
+
+              </div>
+
+    </form>
+    
+</body>
+</html>
