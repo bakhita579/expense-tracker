@@ -1,0 +1,23 @@
+{
+  "name": "expense-trader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bakhita579/expense-trader.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bakhita579/expense-trader/issues"
+  },
+  "homepage": "https://github.com/bakhita579/expense-trader#readme",
+  "devDependencies": {
+    "eslint": "^10.12.0"
+  }
+}
