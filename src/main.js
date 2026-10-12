@@ -1,7 +1,7 @@
 /**
  * Entry point: connects state, API and UI.
  */
-import { fetchRates, loadCachedRates } from './api.js';
+import { fetchExchangeRates } from './api.js';
 import {
   getState,
   subscribe,
@@ -14,7 +14,7 @@ import {
   setRatesLoading,
   setRates,
   setRatesError,
-} from './state.js';
+} from '../state.js';
 import { validateExpense, createExpense } from './utils.js';
 import {
   elements,
