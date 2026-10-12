@@ -1,8 +1,26 @@
 # expense-tracker
 People who travel, freelance for international clients or shop from foreign stores end up paying in many currencies, and it becomes hard to answer a simple question: *how much have I actually spent?* This app lets you log each expense in the currency you paid in — USD, EUR, GBP, KES and more — and instantly see every item and your running total converted into one home currency you understand, using live exchange rates from a public REST API.
-//Tech used during the creation of this expense tracker:
-HTML,CSS JS an the github actions
+# live demo 
+https://bakhita579.github.io/expense-tracker/
+# features list
+- Add Expense Form: Captures description, amount, original currency, and category.
+- ​Live Currency Conversion: Automatically converts all logged expenses to your chosen home currency.
+- ​Real-time Running Total: Automatically calculates and updates the total sum as items are added or removed.
+- ​Category Filtering: Filter displayed expenses instantly by specific categories (Food, Transport, Shopping, Accommodation, Other).
+- ​Immutable State Updates: Leverages JavaScript ES6 spread operators to update state cleanly without direct mutation.
+- ​Robust Error Handling: Gracefully falls back to static rates if the live network fetch fail
+# Technoligies used
+HTML,CSSAdd Expense Form: Captures description, amount, original currency, and category.
+​Live Currency Conversion: Automatically converts all logged expenses to your chosen home currency.
+​Real-time Running Total: Automatically calculates and updates the total sum as items are added or removed.
+​Category Filtering: Filter displayed expenses instantly by specific categories (Food, Transport, Shopping, Accommodation, Other).
+​Immutable State Updates: Leverages JavaScript ES6 spread operators to update state cleanly without direct mutation.
+​Robust Error Handling: Gracefully falls back to static rates if the live network fetch fail JS an the github actions
+# technologies used
+
 Depolyment
+
+
 the below url link will direct you to the web site
 bakhita579.github.io/expense-tracker/
 It is fully client-side. It is hosted as a static site on githu pages 
