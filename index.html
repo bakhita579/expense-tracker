@@ -1,13 +1,16 @@
  <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EXPENSE TRACKER</title>
-     <link rel="stylesheet" href="style.css">
-     <script type="module" src="src/main.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker — Live Currency Conversion</title>
+  <meta name="description" content="Log expenses in any currency and see them converted into your home currency using live exchange rates.">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="src/main.js"></script>
 </head>
+
 <body>
+<<<<<<< HEAD
    <div class="container">
     <header>
         <h1> Expense Tracker</h1>
@@ -37,8 +40,24 @@
             <option value="GBP">GBP</option>
             <option value="KES">KES</option>
             </select>
+=======
+  <div class="container">
+
+    <header class="app-header">
+      <h1>Expense Tracker</h1>
+      <p class="tagline">Log what you spent, in whatever currency you paid in.</p>
+
+      <div class="home-currency">
+        <label for="home-currency">Show totals in</label>
+        <select id="home-currency"></select>
+      </div>
+
+      <p id="rate-status" class="rate-status" role="status"></p>
+>>>>>>> a41e07d (Replace the HTML file with the new one)
     </header>
+
     <main>
+<<<<<<< HEAD
         <section>
             <h2>Total Expense</h2>
             <div id="runningTotal">0.00 KES</div>
@@ -75,23 +94,83 @@
                    <option value="Accomodation">Accomodation</option>
                     <option value="Other">Other</option>
                 </select>
+=======
 
-              </div>
-              <button type="submit">Add Expense</button>
+      <!-- Running total -->
+      <section class="summary" aria-labelledby="total-heading">
+        <h2 id="total-heading">Total spent</h2>
+        <p id="total-amount" class="total-amount">—</p>
+        <p id="total-meta" class="total-meta"></p>
+      </section>
+>>>>>>> a41e07d (Replace the HTML file with the new one)
 
-    </form>
-    </section>
-    <section>
-        <label for="categoryFilter">Filter by catergory</label>
-        <select id="catergoryFilter">
-            <option value="All">All catergories</option>
-            <option value="Food">Food</option>
-            <option value="Transport">Transport</option>
-            <option value="Shopping">Shopping</option>
-            <option value="Accomadation">Accomodation</option>
-            <option value="Other">Other</option>
-        </select>
-    </section>
-    <script type ="module" src="src/main.js"></script>
+      <!-- Add expense -->
+      <section aria-labelledby="form-heading">
+        <h2 id="form-heading">Add an expense</h2>
+
+        <form id="expense-form" novalidate>
+          <div class="field">
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description"
+                   placeholder="e.g. Lunch at the airport"
+                   autocomplete="off" aria-describedby="description-error">
+            <p class="error" id="description-error"></p>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="amount">Amount</label>
+              <input type="number" id="amount" name="amount" step="0.01" min="0"
+                     placeholder="0.00" inputmode="decimal" aria-describedby="amount-error form-preview">
+              <p class="error" id="amount-error"></p>
+            </div>
+
+            <div class="field">
+              <label for="currency">Paid in</label>
+              <select id="currency" name="currency" aria-describedby="currency-error"></select>
+              <p class="error" id="currency-error"></p>
+            </div>
+          </div>
+
+          <p id="form-preview" class="preview" aria-live="polite"></p>
+
+          <div class="field">
+            <label for="category">Category</label>
+            <select id="category" name="category" aria-describedby="category-error"></select>
+            <p class="error" id="category-error"></p>
+          </div>
+
+          <button type="submit" class="primary">Add expense</button>
+        </form>
+      </section>
+
+      <!-- Expense list -->
+      <section aria-labelledby="list-heading">
+        <div class="list-header">
+          <h2 id="list-heading" tabindex="-1">
+            Expenses <span id="expense-count" class="badge">0</span>
+          </h2>
+          <button type="button" id="clear-all" class="danger" disabled>Clear all</button>
+        </div>
+
+        <div class="field">
+          <label for="filter-category">Filter by category</label>
+          <select id="filter-category"></select>
+        </div>
+
+        <ul id="expense-list" class="expense-list"></ul>
+        <p id="empty-state" class="empty-state">No expenses yet. Add your first one above.</p>
+      </section>
+
+    </main>
+
+    <footer class="app-footer">
+      <p>Rates from <a href="https://open.er-api.com" target="_blank" rel="noopener">open.er-api.com</a>.</p>
+    </footer>
+
+  </div>
+
+  <!-- Screen-reader announcements for add / delete / category changes -->
+  <div id="announcer" class="visually-hidden" role="status" aria-live="polite"></div>
 </body>
 </html>
