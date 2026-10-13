@@ -1,28 +1,39 @@
 {
-  "name": "expense-trader",
+  "name": "expense-tracker",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "description": "Single-page expense tracker that converts expenses logged in any currency into one home currency using live exchange rates.",
+  "type": "module",
+  "main": "src/main.js",
   "scripts": {
+<<<<<<< HEAD
 <<<<<<< HEAD
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
 =======
     "test": "jest"
 >>>>>>> 290ae3a (Make the changes made on the api.js)
+=======
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "start": "npx serve ."
+>>>>>>> c940c86 (Replac e the old package.json to the new package.json)
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com"
+    "url": "git+https://github.com/bakhita579/expense-tracker.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["expenses", "currency-conversion", "exchange-rates", "vanilla-js", "es-modules"],
+  "author": "bakhita579",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com"
+    "url": "https://github.com/bakhita579/expense-tracker/issues"
   },
-  "homepage": "https://github.com",
+  "homepage": "https://bakhita579.github.io/expense-tracker/",
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "eslint": "^10.12.0",
+<<<<<<< HEAD
 <<<<<<< HEAD
     "jest": "^25.0.0"
   },
@@ -32,5 +43,8 @@
 =======
     "jest": "^29.7.0"
 >>>>>>> 290ae3a (Make the changes made on the api.js)
+=======
+    "jest": "^30.5.2"
+>>>>>>> c940c86 (Replac e the old package.json to the new package.json)
   }
 }
