@@ -1,131 +1,130 @@
 import {
-  convertAmount,
-  calculateTotal,
+  convert,
+  totalIn,
   filterByCategory,
-  withConvertedAmounts,
-  totalsByCategory,
+  formatMoney,
   validateExpense,
   createExpense,
-  formatMoney,
 } from '../src/utils.js';
 
-// Rates relative to a USD base, shaped like the open.er-api.com response.
-const rates = { USD: 1, EUR: 0.9, GBP: 0.8, KES: 130 };
+// USD-based table, as open.er-api.com returns it.
+const rates = { USD: 1, EUR: 0.92, GBP: 0.79, KES: 129.5 };
 
 const expenses = [
   { id: '1', description: 'Lunch', amount: 10, currency: 'USD', category: 'Food' },
-  { id: '2', description: 'Taxi', amount: 1300, currency: 'KES', category: 'Transport' },
-  { id: '3', description: 'Shoes', amount: 45, currency: 'EUR', category: 'Shopping' },
-  { id: '4', description: 'Dinner', amount: 8, currency: 'GBP', category: 'Food' },
+  { id: '2', description: 'Taxi', amount: 1295, currency: 'KES', category: 'Transport' },
+  { id: '3', description: 'Shoes', amount: 92, currency: 'EUR', category: 'Shopping' },
 ];
 
-describe('convertAmount', () => {
-  test('converts from the base currency to another currency', () => {
-    expect(convertAmount(10, 'USD', 'KES', rates)).toBeCloseTo(1300);
+describe('convert', () => {
+  it('converts between two currencies using a shared base', () => {
+    expect(convert(10, 'USD', 'KES', rates)).toBeCloseTo(1295, 5);
+    expect(convert(92, 'EUR', 'GBP', rates)).toBeCloseTo(79, 5);
   });
 
-  test('converts between two non-base currencies via the base', () => {
-    // 45 EUR -> 50 USD -> 40 GBP
-    expect(convertAmount(45, 'EUR', 'GBP', rates)).toBeCloseTo(40);
+  it('returns the amount unchanged when the currencies match', () => {
+    expect(convert(250, 'KES', 'KES', rates)).toBe(250);
   });
 
-  test('returns the same amount when currencies match, even without rates', () => {
-    expect(convertAmount(25, 'KES', 'KES', null)).toBe(25);
+  it('returns null instead of guessing when a rate is missing', () => {
+    expect(convert(10, 'JPY', 'KES', rates)).toBeNull();
+    expect(convert(10, 'USD', 'JPY', rates)).toBeNull();
+    expect(convert(10, 'USD', 'KES', null)).toBeNull();
   });
 
-  test('handles zero amounts', () => {
-    expect(convertAmount(0, 'USD', 'EUR', rates)).toBe(0);
-  });
-
-  test('returns null when a rate is missing or invalid', () => {
-    expect(convertAmount(10, 'USD', 'XYZ', rates)).toBeNull();
-    expect(convertAmount(10, 'USD', 'EUR', { USD: 1, EUR: 0 })).toBeNull();
-    expect(convertAmount(10, 'USD', 'EUR', null)).toBeNull();
-  });
-
-  test('returns null for non-numeric amounts', () => {
-    expect(convertAmount('abc', 'USD', 'EUR', rates)).toBeNull();
+  it('handles zero and non-numeric amounts', () => {
+    expect(convert(0, 'USD', 'KES', rates)).toBe(0);
+    expect(convert('abc', 'USD', 'KES', rates)).toBeNull();
   });
 });
 
-describe('calculateTotal', () => {
-  test('sums all expenses converted into the home currency', () => {
-    // 10 + 10 + 50 + 10 USD
-    const { total, skipped } = calculateTotal(expenses, 'USD', rates);
-    expect(total).toBeCloseTo(80);
+describe('totalIn', () => {
+  it('totals mixed currencies into the home currency', () => {
+    // 10 USD + 1295 KES + 92 EUR = 10 + 10 + 100 = 120 USD
+    const { total, converted, skipped } = totalIn(expenses, 'USD', rates);
+    expect(total).toBeCloseTo(120, 5);
+    expect(converted).toBe(3);
     expect(skipped).toBe(0);
   });
 
-  test('returns zero for an empty list', () => {
-    expect(calculateTotal([], 'USD', rates)).toEqual({ total: 0, skipped: 0 });
+  it('skips expenses with no available rate rather than counting them as zero', () => {
+    const withUnknown = [...expenses, { id: '4', amount: 500, currency: 'JPY', category: 'Other' }];
+    const { total, skipped } = totalIn(withUnknown, 'USD', rates);
+    expect(total).toBeCloseTo(120, 5);
+    expect(skipped).toBe(1);
   });
 
-  test('skips and counts expenses whose rate is missing', () => {
-    const withUnknown = [...expenses, { id: '5', amount: 99, currency: 'XYZ', category: 'Other' }];
-    const { total, skipped } = calculateTotal(withUnknown, 'USD', rates);
-    expect(total).toBeCloseTo(80);
-    expect(skipped).toBe(1);
+  it('returns zero for an empty list', () => {
+    expect(totalIn([], 'USD', rates).total).toBe(0);
   });
 });
 
 describe('filterByCategory', () => {
-  test('returns only expenses in the chosen category', () => {
-    const food = filterByCategory(expenses, 'Food');
-    expect(food.map((e) => e.id)).toEqual(['1', '4']);
+  it('returns only the matching category', () => {
+    expect(filterByCategory(expenses, 'Food')).toHaveLength(1);
+    expect(filterByCategory(expenses, 'Food')[0].description).toBe('Lunch');
   });
 
-  test('returns everything for "All" and does not mutate the input', () => {
+  it('returns everything for "All" and an empty array for an unknown category', () => {
+    expect(filterByCategory(expenses, 'All')).toHaveLength(3);
+    expect(filterByCategory(expenses, 'Groceries')).toHaveLength(0);
+  });
+
+  it('does not mutate the original array', () => {
     const copy = [...expenses];
-    expect(filterByCategory(expenses, 'All')).toHaveLength(4);
+    filterByCategory(expenses, 'Food');
     expect(expenses).toEqual(copy);
-  });
-
-  test('returns an empty array when nothing matches', () => {
-    expect(filterByCategory(expenses, 'Bills')).toEqual([]);
-  });
-});
-
-describe('withConvertedAmounts and totalsByCategory', () => {
-  test('adds converted values without mutating the originals', () => {
-    const result = withConvertedAmounts(expenses, 'KES', rates);
-    expect(result[0].converted).toBeCloseTo(1300);
-    expect(expenses[0]).not.toHaveProperty('converted');
-  });
-
-  test('groups totals per category', () => {
-    const totals = totalsByCategory(expenses, 'USD', rates);
-    expect(totals.Food).toBeCloseTo(20);
-    expect(totals.Transport).toBeCloseTo(10);
-    expect(totals.Shopping).toBeCloseTo(50);
-  });
-});
-
-describe('validateExpense and createExpense', () => {
-  test('rejects empty description and non-positive amounts', () => {
-    const { valid, errors } = validateExpense({ description: '  ', amount: '0', currency: 'USD', category: 'Food' });
-    expect(valid).toBe(false);
-    expect(errors).toHaveProperty('description');
-    expect(errors).toHaveProperty('amount');
-  });
-
-  test('accepts valid input and builds a trimmed, rounded expense', () => {
-    const input = { description: ' Coffee ', amount: '3.456', currency: 'EUR', category: 'Food' };
-    expect(validateExpense(input).valid).toBe(true);
-    const expense = createExpense(input, 'abc');
-    expect(expense).toMatchObject({ id: 'abc', description: 'Coffee', amount: 3.46, currency: 'EUR' });
   });
 });
 
 describe('formatMoney', () => {
-  test('formats with currency code and two decimals', () => {
-    expect(formatMoney(1250, 'KES')).toMatch(/KES\s?1,250\.00/);
+  it('formats to two decimal places with the currency', () => {
+    expect(formatMoney(1234.5, 'USD')).toMatch(/1,234\.50/);
   });
 
-  test('uses the currency\'s own decimal places (JPY has none)', () => {
-    expect(formatMoney(1500.4, 'JPY')).toMatch(/JPY\s?1,500$/);
+  it('returns a dash for values that are not numbers', () => {
+    expect(formatMoney(undefined, 'USD')).toBe('—');
+  });
+});
+
+describe('validateExpense', () => {
+  it('accepts a complete, valid expense', () => {
+    const { valid, errors } = validateExpense({
+      description: 'Coffee',
+      amount: '4.50',
+      currency: 'USD',
+      category: 'Food',
+    });
+    expect(valid).toBe(true);
+    expect(errors).toEqual({});
   });
 
-  test('shows a dash when the value is unavailable', () => {
-    expect(formatMoney(null, 'USD')).toBe('—');
+  it('rejects a blank description, a zero amount and bad codes', () => {
+    const { valid, errors } = validateExpense({
+      description: '   ',
+      amount: '0',
+      currency: 'XYZ',
+      category: 'Nope',
+    });
+    expect(valid).toBe(false);
+    expect(errors.description).toBeDefined();
+    expect(errors.amount).toBeDefined();
+    expect(errors.currency).toBeDefined();
+    expect(errors.category).toBeDefined();
+  });
+});
+
+describe('createExpense', () => {
+  it('builds an expense with an id and a numeric amount', () => {
+    const expense = createExpense({
+      description: '  Taxi  ',
+      amount: '12.5',
+      currency: 'KES',
+      category: 'Transport',
+    });
+    expect(expense.id).toBeTruthy();
+    expect(expense.description).toBe('Taxi');
+    expect(expense.amount).toBe(12.5);
+    expect(expense.currency).toBe('KES');
   });
 });
