@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/bakhita579/expense-trader#readme",
   "devDependencies": {
-    "eslint": "^10.12.0"
+    "eslint": "^10.12.0",
+    "jest": "^25.0.0"
   }
 }
