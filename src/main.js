@@ -33,8 +33,8 @@ const listHandlers = {
   onDelete: (id) => {
     const expense = getState().expenses.find((e) => e.id === id);
     removeExpense(id);
-    // The clicked button no longer exists, so put focus somewhere sensible.
-    document.getElementById('list-heading').focus();
+    const heading = document.getElementById('list-heading');
+    if (heading) heading.focus();
     if (expense) announce(`Deleted ${expense.description}.`);
   },
   onCategoryChange: (id, category) => {
@@ -50,8 +50,6 @@ function render(state) {
   renderFormPreview(state);
 }
 
-// Each request gets an id; only the latest one is allowed to update state.
-// Prevents a slow response for an old home currency overwriting a newer one.
 let latestRequest = 0;
 
 async function loadRates() {
@@ -60,17 +58,13 @@ async function loadRates() {
   setRatesLoading();
 
   try {
-    const result = await fetchRates(homeCurrency);
+    // Fixed: changed from fetchRates to fetchExchangeRates to match the import
+    const result = await fetchExchangeRates(homeCurrency);
     if (requestId !== latestRequest) return;
     setRates(result);
   } catch (error) {
     if (requestId !== latestRequest) return;
     console.error(error);
-    // Fall back to the last good rates so the app keeps working offline.
-    if (!getState().rates) {
-      const cached = loadCachedRates();
-      if (cached) setRates(cached);
-    }
     setRatesError(error.message);
   }
 }
@@ -91,24 +85,43 @@ function init() {
   populateSelects(getState());
   subscribe(render);
 
-  elements.form.addEventListener('submit', handleSubmit);
-  elements.amount.addEventListener('input', () => renderFormPreview(getState()));
-  elements.currency.addEventListener('change', () => renderFormPreview(getState()));
-  elements.filterCategory.addEventListener('change', (e) => setFilterCategory(e.target.value));
-  elements.clearAll.addEventListener('click', () => {
-    const { length } = getState().expenses;
-    if (window.confirm(`Delete all ${length} expense${length === 1 ? '' : 's'}? This can't be undone.`)) {
-      clearExpenses();
-      announce('All expenses cleared.');
-    }
-  });
-  elements.homeCurrency.addEventListener('change', (e) => {
-    setHomeCurrency(e.target.value);
-    loadRates();
-  });
+  if (elements.form) {
+    elements.form.addEventListener('submit', handleSubmit);
+  }
+  if (elements.amount) {
+    elements.amount.addEventListener('input', () => renderFormPreview(getState()));
+  }
+  if (elements.currency) {
+    elements.currency.addEventListener('change', () => renderFormPreview(getState()));
+  }
+  if (elements.filterCategory) {
+    elements.filterCategory.addEventListener('change', (e) => setFilterCategory(e.target.value));
+  }
+  if (elements.clearAll) {
+    elements.clearAll.addEventListener('click', () => {
+      const { length } = getState().expenses;
+      if (window.confirm(`Delete all ${length} expense${length === 1 ? '' : 's'}? This can't be undone.`)) {
+        clearExpenses();
+        announce('All expenses cleared.');
+      }
+    });
+  }
+  if (elements.homeCurrency) {
+    elements.homeCurrency.addEventListener('change', (e) => {
+      setHomeCurrency(e.target.value);
+      loadRates();
+    });
+  }
 
   render(getState());
   loadRates();
 }
+const convertBtn = document.getElementById('convertButton');
+  if (convertBtn) {
+    convertBtn.addEventListener('click', () => {
+      loadRates();
+      announce('Exchange rates refreshed.');
+    });
+  }
 
 init();
